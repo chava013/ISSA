@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fonts.css' ) }}">
+
+    <!--ICONOS BOOSTRAP-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- CSS only -->
+    <!-- Our Custom CSS -->
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <title>EVALUACIÓN ALUMNOS</title>
+</head>
+
+<body style=" background-color: #e6e6e6;">
+
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-light m-auto" style="background-color:#34b5aa">
+        <div class="container"><br></div>
+        </nav>
+    </header>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <a href="/usuario/inicialusuario">
+                    <img class="logo"  src="/static/img/lOGOact.png">
+                </a>
+            </div>
+
+            <ul class="list-unstyled ">
+                <li class="option">
+                    <a href="/usuario/lista">GENERAR LISTA</a>
+                </li>
+                <li class="option active ">
+                    <a href="/usuario/evaluacion" >EVALUACIÓN TRIMESTRAL</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Page Content  -->
+        <div id="content" >     
+            <button type="button" id="sidebarCollapse" class="btn btn-info">     <!-- Boton azul, que colapsa el menu lateral  -->
+                <i class="fas fa-align-left"></i>
+                <span style="padding: 1px 1px 1px 1px;"></span>
+            </button>
+            <a href="#" class="btn-flotante "  id="sidebarCollapse" style="text-decoration:none;" onclick="CerrarSesiones()">           <!-- flotante de usuario  -->
+                <i class="bi bi-person-circle icono"></i>
+                <span style="padding: 1px 1px 1px 1px;">{{usuario}}</span>
+            </a>
+        <!--Table-->
+            <form method="POST" action="evaluacion_agregada" onsubmit="return submitForm(this);">
+            <div class="container" style="padding-left: 30px; padding-right: 30px;">
+
+                {% for al in alumnos %}
+                <h2 class="tituloBarra">{{al.alum_apellidop}} / {{al.alum_apellidom}} * {{al.alum_nombre}}</h2>
+                <!--  class="active" -->
+                <div class="table-responsive" style="padding-top:5px;" >
+                    <table class="table table-light">
+                        <thead style="background-color: #6FA84B;text-align: center;">
+                        <tr align="center">
+                            <th scope="col" class="tituloTable" >Materia</th>
+                            <th scope="col" class="tituloTable">Trimestre 1</th>
+                            <th scope="col" class="tituloTable">Trimestre 2</th>
+                            <th scope="col" class="tituloTable">Trimestre 3</th>
+                        </tr>
+                        </thead>
+                        <tbody style="text-align: center;">
+
+                        {% if materias: %}
+                        {% for mat in materias: %}
+                        <tr>
+                            {% if trimestre==1: %}
+                            <th scope="row">{{mat.nombre_materia}}</th>
+                            {% if activado: %}
+                            <td><input type="number" max="10" min="0" id="cal1" class="inputTable " required name="cal1{{mat.cve_materia}}{{al.cve_alum}}"/></td>
+                            {% else: %}
+                            {% for cal in calis: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal1" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}" name="cal1{{mat.cve_materia}}{{al.cve_alum}}" disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                            <td><input type="text" id="cal2" class="inputTable" disabled/></td>
+                            <td><input type="text" id="cal3" class="inputTable" disabled /></td>
+                            {% elif trimestre==2: %}
+                            <th scope="row">{{mat.nombre_materia}}</th>
+                            {% for cal in calis: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal1" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}"disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            <td><input type="number" min="0" max="10" id="cal2" class="inputTable" required name="cal1{{mat.cve_materia}}{{al.cve_alum}}"/></td>
+                            <td><input type="text" id="cal3" class="inputTable" disabled /></td>
+                                {% elif trimestre==3: %}
+                            <th scope="row">{{mat.nombre_materia}}</th>
+                            {% for cal in calis: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal1" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}"disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% for cal in calis2: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal2" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}"disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            <td><input type="number" max="10" min="0" id="cal3" class="inputTable" required name="cal1{{mat.cve_materia}}{{al.cve_alum}}" /></td>
+                              {% elif trimestre==4: %}
+                            <th scope="row">{{mat.nombre_materia}}</th>
+                            {% for cal in calis: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal1" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}"disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% for cal in calis2: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal2" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}"disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                             {% for cal in calis3: %}
+                            {% for c in cal: %}
+                            {% if c.CVE_ALUM == al.cve_alum and c.CVE_MATERIA == mat.cve_materia: %}
+                            <td><input type="text" id="cal3" class="inputTable" value="{{c.CALIF_TRIM_ALUM}}"disabled/></td>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+
+
+                        <tr>
+                            <th scope="row"></th>
+                            <td colspan="3" align="right">
+                                <div d-flex justify-content-end>
+
+
+
+
+                                </div>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+            </div>
+        <!-- Search form -->
+
+            <div class="container d-flex justify-content-center" style="padding-bottom: 100px;">
+
+                <button type="submit" id="sidebarCollapse" class="btnAzul"  >     <!-- Boton azul, que colapsa el menu lateral  -->
+                    <i class="bi bi-check-circle"></i>
+                    <span>Confirmar</span>
+                </button>
+
+            </div>
+            </form>
+        </div>
+    </div>
+
+     <footer  style="background-color: #34b5aa;">
+
+        <div class="container p-4" >
+
+        </div>
+
+    </footer>
+    <script>
+        function Cambiar(){
+            int contador = 0;
+
+        }
+
+        document.getElementById('derecha').addEventListener('click',
+        Cambiar, false);
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="/static/js/guardar.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.10/dist/sweetalert2.all.min.js"></script>
+    <script src="/static/js/cerrarSesiones.js"></script>
+</body>
+</html>
+
+
